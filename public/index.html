@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Photos & Videos</title>
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Upload Photos & Videos from your phone/pc</h1>
+    <p class="author-name">Developed by <a href="https://github.com/AgentHackerYT" target="_blank">AgentHackerYT</a></p>
+    
+    <!-- Drag-and-drop area -->
+    <div id="dropArea" class="drop-area">
+      <p>Drag & Drop files here</p>
+      <button id="chooseFileButton">Or choose file</button>
+      <input type="file" id="fileInput" accept="image/*,video/*" style="display: none;" multiple>
+    </div>
+
+    <!-- Progress bar -->
+    <div id="progressContainer" class="progress-container" style="display: none;">
+      <div id="progressBar" class="progress-bar"></div>
+    </div>
+
+    <!-- File list -->
+    <div class="file-list" id="fileList"></div>
+
+    <div id="message" class="message"></div>
+  </div>
+
+  <footer>
+    <p>GitHub Repository: <a href="https://github.com/AgentHackerYT/localfileshare" target="_blank">link</a></p>
+  </footer>
+
+  <script>
+    const dropArea = document.getElementById('dropArea');
+    const chooseFileButton = document.getElementById('chooseFileButton');
+    const fileInput = document.getElementById('fileInput');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    const messageDiv = document.getElementById('message');
+    const fileListDiv = document.getElementById('fileList');
+
+    // Handle drag-and-drop files
+    dropArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropArea.classList.add('drag-over');
+    });
+
+    dropArea.addEventListener('dragleave', () => {
+      dropArea.classList.remove('drag-over');
+    });
+
+    dropArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropArea.classList.remove('drag-over');
+      handleFiles(e.dataTransfer.files);
+    });
+
+    // Choose file button
+    chooseFileButton.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', () => {
+      handleFiles(fileInput.files);
+    });
+
+    // Handle file upload
+    async function handleFiles(files) {
+      if (files.length > 0) {
+        const file = files[0];
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        const request = new XMLHttpRequest();
+        request.open('POST', '/upload', true);
+
+        // Display progress bar
+        request.upload.onprogress = (e) => {
+          if (e.lengthComputable) {
+            const percent = (e.loaded / e.total) * 100;
+            progressContainer.style.display = 'block';
+            progressBar.style.width = percent + '%';
+          }
+        };
+
+        request.onload = () => {
+          if (request.status === 200) {
+            messageDiv.textContent = 'File uploaded successfully!';
+            messageDiv.style.color = 'green';
+            loadFiles(); // Refresh the file list
+          } else {
+            messageDiv.textContent = 'Error uploading file.';
+            messageDiv.style.color = 'red';
+          }
+          progressContainer.style.display = 'none';
+        };
+
+        request.send(formData);
+      }
+    }
+
+    // Load the list of uploaded files
+    async function loadFiles() {
+      const response = await fetch('/files');
+      const files = await response.json();
+
+      fileListDiv.innerHTML = '';
+      files.forEach(file => {
+        const fileDiv = document.createElement('div');
+        fileDiv.classList.add('file-item');
+        let filePreview = '';
+        
+        // Check if the file is an image or video for preview
+        if (file.url.match(/\.(jpeg|jpg|gif|png)$/)) {
+          filePreview = `<img src="${file.url}" alt="${file.name}" width="100">`;
+        } else if (file.url.match(/\.(mp4|mov|avi)$/)) {
+          filePreview = `<video src="${file.url}" width="100" controls></video>`;
+        }
+
+        fileDiv.innerHTML = `
+          ${filePreview}
+          <p>${file.name} (${Math.round(file.size / 1024)} KB)</p>
+          <button onclick="deleteFile('${file.name}')">Delete</button>
+          <a href="${file.url}" download="${file.name}">
+            <button>Download</button>
+          </a>
+        `;
+        fileListDiv.appendChild(fileDiv);
+      });
+    }
+
+    // Delete a file
+    async function deleteFile(filename) {
+      const response = await fetch(`/file/${filename}`, { method: 'DELETE' });
+      if (response.ok) {
+        loadFiles(); // Refresh file list after deletion
+      } else {
+        alert('Error deleting file');
+      }
+    }
+
+    // Initial load of files
+    loadFiles();
+  </script>
+</body>
+</html>
