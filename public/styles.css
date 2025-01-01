@@ -1,0 +1,221 @@
+/* Base Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 30px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Main Title */
+  h1 {
+    font-size: 2.5em;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 20px;
+    transition: color 0.3s ease;
+  }
+  
+  h1:hover {
+    color: #4CAF50;
+  }
+  
+  /* Author Name */
+  .author-name {
+    font-size: 1.2em;
+    color: #555;
+    margin-top: 5px;
+  }
+  
+  .author-name a {
+    color: #4CAF50;
+    text-decoration: none;
+  }
+  
+  .author-name a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Drag & Drop Area */
+  .drop-area {
+    border: 3px dashed #4CAF50;
+    padding: 40px;
+    background-color: #fafafa;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .drop-area:hover {
+    background-color: #e0f7e0;
+  }
+  
+  .drop-area p {
+    font-size: 1.1em;
+    color: #777;
+  }
+  
+  /* Button Styles */
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+  }
+  
+  /* Progress Bar */
+  .progress-container {
+    width: 100%;
+    background-color: #e0e0e0;
+    height: 8px;
+    border-radius: 10px;
+    margin-top: 20px;
+    display: none;
+  }
+  
+  .progress-bar {
+    background-color: #4CAF50;
+    height: 100%;
+    width: 0%;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+  }
+  
+  /* File List */
+  .file-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 30px;
+  }
+  
+  .file-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin: 15px;
+    width: 250px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .file-item:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .file-item img, .file-item video {
+    max-width: 100%;
+    margin-bottom: 15px;
+    border-radius: 8px;
+  }
+  
+  .file-item button {
+    margin-top: 10px;
+  }
+  
+  /* Message */
+  .message {
+    font-size: 1.2em;
+    margin-top: 20px;
+  }
+  
+  /* Footer */
+  footer {
+    text-align: center;
+    font-size: 1em;
+    color: #777;
+    margin-top: 40px;
+  }
+  
+  /* Media Queries for Responsiveness */
+  @media screen and (max-width: 768px) {
+    .container {
+      padding: 20px;
+    }
+  
+    h1 {
+      font-size: 2em;
+    }
+  
+    .author-name {
+      font-size: 1em;
+    }
+  
+    .drop-area {
+      padding: 20px;
+    }
+  
+    .file-item {
+      width: 90%;
+      margin: 10px auto;
+    }
+  
+    button {
+      padding: 12px 25px;
+      font-size: 0.9em;
+    }
+  
+    .progress-container {
+      height: 6px;
+    }
+  
+    .file-list {
+      flex-direction: column;
+    }
+  
+    .file-item img, .file-item video {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    h1 {
+      font-size: 1.8em;
+    }
+  
+    .author-name {
+      font-size: 0.9em;
+    }
+  
+    .drop-area {
+      padding: 15px;
+    }
+  
+    .file-item {
+      width: 100%;
+      margin: 10px auto;
+    }
+  
+    button {
+      padding: 10px 20px;
+      font-size: 0.85em;
+    }
+  
+    .progress-container {
+      height: 5px;
+    }
+  }
+  
